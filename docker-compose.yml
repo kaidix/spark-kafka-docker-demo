@@ -1,16 +1,21 @@
-kafka:
-  image: antlypls/kafka:0.8.2.2
-  environment:
-    - KAFKA=localhost:9092
-    - ZOOKEEPER=localhost:2181
-  expose:
-    - "2181"
-    - "9092"
+version: "2"
+services:
+  kafka:
+    image: antlypls/kafka:0.8.2.2
+    environment:
+      - KAFKA=kafka:9092
+      - ZOOKEEPER=192.168.99.104:2181
+      - "constraint:node==kafka"
+    expose:
+      - "2181"
+      - "9092"
 
-spark:
-  image: antlypls/spark:1.6.0
-  command: bash
-  volumes:
-    - ./target/scala-2.10:/app
-  links:
-   - kafka
+  spark:
+    image: antlypls/spark:1.6.0
+    command: bash
+    volumes:
+      - ./target/scala-2.10:/app
+    links:
+      - kafka
+    environment:
+      - "constraint:node=spark"
